@@ -19,7 +19,7 @@ data DFA = DFA {
                ,alphabet      :: ( Set Action ) -- An alphabet is a set of actions
                ,transitions   :: ( TrMap )      -- A transition function
                ,initial       :: ( Loc )        -- The initial location
-               ,terminal      :: ( Set Loc )    -- Accepting locations
+               ,terminals      :: ( Set Loc )    -- Accepting locations
                }
 
 type Loc = String
@@ -46,7 +46,7 @@ walk (a:as) = do
             walk as
 
 accept :: DFA -> [Action] -> Bool
-accept dfa word = Set.member (evalState (walk word) dfa) (terminal dfa)
+accept dfa word = Set.member (evalState (walk word) dfa) (terminals dfa)
 
 isComplete :: DFA -> Bool
 isComplete dfa = all (\k -> Map.member k (transitions dfa)) [(l,a) | l <- Set.elems $locations dfa, a <- Set.elems $ alphabet dfa]
